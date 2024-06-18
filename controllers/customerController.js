@@ -2,7 +2,7 @@ const Customer = require('../models/customerModel');
 
 // Create a new customer
 exports.createCustomer = async (req, res) => {
-    const { customerId, name, shopName, shopAddress, ownerPhoneNumber, managerPhoneNumber, fullCylindersInHand, emptyCylindersInHand, moneyToReceive } = req.body;
+    const { customerId, name, shopName, shopAddress, ownerPhoneNumber, managerPhoneNumber, fullCylinderInHand, emptyCylinderInHand, moneyToReceive } = req.body;
 console.log(req.body);
     try {
         const customer = new Customer({
@@ -12,8 +12,8 @@ console.log(req.body);
             shopAddress,
             ownerPhoneNumber,
             managerPhoneNumber,
-            fullCylindersInHand,
-            emptyCylindersInHand,
+            fullCylinderInHand,
+            emptyCylinderInHand,
             moneyToReceive
         });
 
@@ -39,12 +39,12 @@ exports.getAllCustomers = async (req, res) => {
 // Update customer
 exports.updateCustomer = async (req, res) => {
     const { id } = req.params;
-    const { name, shopName, shopAddress, ownerPhoneNumber, managerPhoneNumber, fullCylindersInHand, emptyCylindersInHand, moneyToReceive } = req.body;
+    const { name, shopName, shopAddress, ownerPhoneNumber, managerPhoneNumber, fullCylinderInHand, emptyCylinderInHand, moneyToReceive } = req.body;
 
     try {
         const customer = await Customer.findByIdAndUpdate(
             id,
-            { name, shopName, shopAddress, ownerPhoneNumber, managerPhoneNumber, fullCylindersInHand, emptyCylindersInHand, moneyToReceive },
+            { name, shopName, shopAddress, ownerPhoneNumber, managerPhoneNumber, fullCylinderInHand, emptyCylinderInHand, moneyToReceive },
             { new: true }
         );
 
