@@ -5,6 +5,7 @@ const userRoutes = require('./routes/userRoutes');
 const customerRoutes = require('./routes/customerRoutes');
 const stockRoutes = require('./routes/stockRoutes');
 const billingRoutes = require('./routes/billingRoutes');
+const employeeRoutes = require('./routes/employeeRoutes');
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
 dotenv.config();
@@ -22,6 +23,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/customers', customerRoutes);
 app.use('/api/stock', stockRoutes);
 app.use('/api/billing', billingRoutes);
+app.use('/api/employees', employeeRoutes); 
 
 // Middleware for handling 404 and errors
 app.use(notFound);
