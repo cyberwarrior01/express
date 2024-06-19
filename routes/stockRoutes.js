@@ -1,23 +1,20 @@
 const express = require('express');
-const {
-    createStock,
-    getAllStock,
-    updateStock,
-    deleteStock
-} = require('../controllers/stockController');
-
 const router = express.Router();
+const stockController = require('../controllers/stockController');
 
-// Create new stock
-router.post('/', createStock);
+// Create a new stock entry
+router.post('/', stockController.createStock);
 
-// Get all stock
-router.get('/', getAllStock);
+// Get all stocks
+router.get('/', stockController.getAllStocks);
+
+// Get stock by ID
+router.get('/:id', stockController.getStockById);
 
 // Update stock by ID
-router.put('/:id', updateStock);
+router.put('/:id', stockController.updateStockById);
 
 // Delete stock by ID
-router.delete('/:id', deleteStock);
+router.delete('/:id', stockController.deleteStockById);
 
 module.exports = router;

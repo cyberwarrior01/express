@@ -1,46 +1,68 @@
 const Stock = require('../models/stockModel');
 
-// Create new stock
+// Create a new stock entry
 exports.createStock = async (req, res) => {
-    const { stockType, quantity, pricePerUnit } = req.body;
+    const { cylinderName, cylinderWeight, ratePerCylinder ,fullCylindersInStock , emptyCylindersInStock } = req.body;
 
     try {
         const stock = new Stock({
-            stockType,
-            quantity,
-            pricePerUnit
+            cylinderName,
+            cylinderWeight,
+            ratePerCylinder,
+            fullCylindersInStock, emptyCylindersInStock
         });
 
         await stock.save();
-        res.json(stock);
+        res.status(201).json(stock);
     } catch (err) {
         console.error(err.message);
-        res.status(500).send('Server error');
+        res.status(500).send('Server Error');
     }
 };
 
-// Get all stock
-exports.getAllStock = async (req, res) => {
+// Get all stocks
+exports.getAllStocks = async (req, res) => {
     try {
-        const stock = await Stock.find();
-        res.json(stock);
+        const stocks = await Stock.find();
+        res.json(stocks);
     } catch (err) {
         console.error(err.message);
-        res.status(500).send('Server error');
+        res.status(500).send('Server Error');
     }
 };
 
-// Update stock
-exports.updateStock = async (req, res) => {
+// Get stock by ID
+exports.getStockById = async (req, res) => {
     const { id } = req.params;
-    const { stockType, quantity, pricePerUnit } = req.body;
 
     try {
-        const stock = await Stock.findByIdAndUpdate(
-            id,
-            { stockType, quantity, pricePerUnit },
-            { new: true }
-        );
+        const stock = await Stock.findById(id);
+        if (!stock) {
+            return res.status(404).json({ msg: 'Stock not found' });
+        }
+        res.json(stock);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+};
+
+// Update stock by ID
+exports.updateStockById = async (req, res) => {
+    const { id } = req.params;
+    const { cylinderName, cylinderWeight, fullCylindersInStock, emptyCylindersInStock, ratePerCylinder } = req.body;
+
+    try {
+        const updatedFields = {
+            cylinderName,
+            cylinderWeight,
+            fullCylindersInStock,
+            emptyCylindersInStock,
+            ratePerCylinder,
+            lastUpdated: Date.now()
+        };
+
+        const stock = await Stock.findByIdAndUpdate(id, updatedFields, { new: true });
 
         if (!stock) {
             return res.status(404).json({ msg: 'Stock not found' });
@@ -49,16 +71,16 @@ exports.updateStock = async (req, res) => {
         res.json(stock);
     } catch (err) {
         console.error(err.message);
-        res.status(500).send('Server error');
+        res.status(500).send('Server Error');
     }
 };
 
-// Delete stock
-exports.deleteStock = async (req, res) => {
+// Delete stock by ID
+exports.deleteStockById = async (req, res) => {
     const { id } = req.params;
 
     try {
-        const stock = await Stock.findByIdAndRemove(id);
+        const stock = await Stock.findByIdAndDelete(id);
 
         if (!stock) {
             return res.status(404).json({ msg: 'Stock not found' });
@@ -67,6 +89,6 @@ exports.deleteStock = async (req, res) => {
         res.json({ msg: 'Stock removed' });
     } catch (err) {
         console.error(err.message);
-        res.status(500).send('Server error');
+        res.status(500).send('Server Error');
     }
 };

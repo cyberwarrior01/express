@@ -1,19 +1,23 @@
 const mongoose = require('mongoose');
 
 const stockSchema = new mongoose.Schema({
-    cylinderType: {
+    cylinderName: {
         type: String,
         required: true
     },
-    fullCylinders: {
+    cylinderWeight: {
+        type: String,
+        required: true
+    },
+    fullCylindersInStock: {
         type: Number,
         default: 0
     },
-    emptyCylinders: {
+    emptyCylindersInStock: {
         type: Number,
         default: 0
     },
-    pricePerCylinder: {
+    ratePerCylinder: {
         type: Number,
         required: true
     },
@@ -21,6 +25,6 @@ const stockSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     }
-}, { timestamps: true });
+});
 
 module.exports = mongoose.model('Stock', stockSchema);
