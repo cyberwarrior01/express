@@ -1,32 +1,62 @@
 const mongoose = require('mongoose');
 
 const billingSchema = new mongoose.Schema({
-    customerId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Customer',
+    shopName: {
+        type: String,
         required: true
     },
     employeeId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Employee',
+        type: String,
         required: true
     },
-    cylindersDelivered: {
+    cylinderType: {
+        type: String,
+        required: true
+    },
+    cylinderName: {
+        type: String,
+        required: true
+    },
+    fullCylindersDelivered: {
         type: Number,
+        required: true
+    },
+    emptyReceived: {
+        type: Number,
+        required: true
+    },
+    emptyBalance: {
+        type: Number,
+        required: true
+    },
+    extraEmpty: {
+        type: Number,
+        default: 0
+    },
+    totalEmpty: {
+        type: Number,
+        required: true
+    },
+    paymentType: {
+        type: String,
+        enum: ['cash', 'online', 'balance'],
         required: true
     },
     totalAmount: {
         type: Number,
         required: true
     },
-    paymentType: {
-        type: String,
-        enum: ['cash', 'credit', 'debit'], // Add 'cash' as a valid enum value
-        required: true
-    },
     amountReceived: {
         type: Number,
         required: true
+    },
+    pendingPayment: {
+        type: Number,
+        required: true
+    },
+    oldPaymentReceived: {
+        type: Number,
+        default: 0
     }
 }, { timestamps: true });
 

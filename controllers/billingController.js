@@ -1,33 +1,39 @@
 const Billing = require('../models/billingModel');
 
-// Create a new billing record
+// Create a new billing entry
 exports.createBilling = async (req, res) => {
-    const { customerId, employeeId, cylindersDelivered, totalAmount, paymentStatus, paymentType, amountReceived, notes } = req.body;
+    const { shopName, employeeId, cylinderType, cylinderName, fullCylindersDelivered, emptyReceived, emptyBalance, extraEmpty, totalEmpty, paymentType, totalAmount, amountReceived, pendingPayment, oldPaymentReceived } = req.body;
 
     try {
         const billing = new Billing({
-            customerId,
+            shopName,
             employeeId,
-            cylindersDelivered,
-            totalAmount,
-            paymentStatus,
+            cylinderType,
+            cylinderName,
+            fullCylindersDelivered,
+            emptyReceived,
+            emptyBalance,
+            extraEmpty,
+            totalEmpty,
             paymentType,
+            totalAmount,
             amountReceived,
-            notes
+            pendingPayment,
+            oldPaymentReceived
         });
 
         await billing.save();
-        res.json(billing);
+        res.status(201).json(billing);
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');
     }
 };
 
-// Get all billing records
-exports.getAllBilling = async (req, res) => {
+// Get all billing entries
+exports.getAllBillings = async (req, res) => {
     try {
-        const billings = await Billing.find().populate('customerId employeeId');
+        const billings = await Billing.find();
         res.json(billings);
     } catch (err) {
         console.error(err.message);
@@ -35,20 +41,15 @@ exports.getAllBilling = async (req, res) => {
     }
 };
 
-// Update billing record
-exports.updateBilling = async (req, res) => {
+// Get a single billing entry by ID
+exports.getBillingById = async (req, res) => {
     const { id } = req.params;
-    const { customerId, employeeId, cylindersDelivered, totalAmount, paymentStatus, paymentType, amountReceived, notes } = req.body;
 
     try {
-        const billing = await Billing.findByIdAndUpdate(
-            id,
-            { customerId, employeeId, cylindersDelivered, totalAmount, paymentStatus, paymentType, amountReceived, notes },
-            { new: true }
-        );
+        const billing = await Billing.findById(id);
 
         if (!billing) {
-            return res.status(404).json({ msg: 'Billing record not found' });
+            return res.status(404).json({ msg: 'Billing not found' });
         }
 
         res.json(billing);
@@ -58,20 +59,4 @@ exports.updateBilling = async (req, res) => {
     }
 };
 
-// Delete billing record
-exports.deleteBilling = async (req, res) => {
-    const { id } = req.params;
 
-    try {
-        const billing = await Billing.findByIdAndRemove(id);
-
-        if (!billing) {
-            return res.status(404).json({ msg: 'Billing record not found' });
-        }
-
-        res.json({ msg: 'Billing record removed' });
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Server error');
-    }
-};
